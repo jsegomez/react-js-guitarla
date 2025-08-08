@@ -31,12 +31,36 @@ function App() {
     setCart(prevCart => prevCart.filter(item => item.id !== guitarId));
   }
 
+  function increaseQuantity(guitarId) {
+    setCart(prevCart => 
+      prevCart.map(item => {
+        if (item.id === guitarId) {
+          return { ...item, quantity: item.quantity++ };
+        }
+        return item;
+      })
+    );
+  }
+
+  function decreaseQuantity(guitarId) {
+    setCart(prevCart => 
+      prevCart.map(item => {
+        if (item.id === guitarId && item.quantity > 1) {
+          return { ...item, quantity: item.quantity-- };
+        }
+        return item;
+      })
+    );
+  }
+  
   return (
     <>
       <Header
         cart={ cart } 
         setCart={ setCart }        
         removeFromCart={ removeFromCart }
+        increaseQuantity={ increaseQuantity }
+        decreaseQuantity={ decreaseQuantity }
       />
 
       <main className="container-xl mt-5">

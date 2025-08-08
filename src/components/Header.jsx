@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export default function Header({ cart, setCart, removeFromCart }) {
+export default function Header({ cart, setCart, removeFromCart, increaseQuantity, decreaseQuantity }) {
   const clearCart = () => setCart([]);
   const cartTotal = useMemo(() => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0)
@@ -52,6 +52,7 @@ export default function Header({ cart, setCart, removeFromCart }) {
                                   <button
                                     type="button"
                                     className="btn btn-dark"
+                                    onClick={() => decreaseQuantity(item.id)}
                                   >
                                     -
                                   </button>
@@ -59,6 +60,7 @@ export default function Header({ cart, setCart, removeFromCart }) {
                                   <button
                                     type="button"
                                     className="btn btn-dark"
+                                    onClick={() => increaseQuantity(item.id)}
                                   >
                                     +
                                   </button>
