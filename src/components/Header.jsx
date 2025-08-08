@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-export default function Header({ cart, setCart }) {
+export default function Header({ cart, setCart, removeFromCart }) {
   const clearCart = () => setCart([]);
-  const totalCart = useMemo(() => {
+  const cartTotal = useMemo(() => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0)
   }, [cart]);
 
@@ -39,14 +39,14 @@ export default function Header({ cart, setCart }) {
                         </thead>
                         <tbody>
                           {
-                            cart.map((cart, index) => (
+                            cart.map((item, index) => (
                               <tr key={index}>
                                 <td>
-                                  <img className="img-fluid" src={`/img/${cart.image}.jpg`} alt="imagen guitarra" />
+                                  <img className="img-fluid" src={`/img/${item.image}.jpg`} alt="imagen guitarra" />
                                 </td>
-                                <td>SRV</td>
+                                <td>{ item.name }</td>
                                 <td className="fw-bold">
-                                  ${cart.price}
+                                  ${item.price}
                                 </td>
                                 <td className="flex align-items-start gap-4">
                                   <button
@@ -55,7 +55,7 @@ export default function Header({ cart, setCart }) {
                                   >
                                     -
                                   </button>
-                                  {cart.quantity}
+                                  {item.quantity}
                                   <button
                                     type="button"
                                     className="btn btn-dark"
@@ -67,6 +67,7 @@ export default function Header({ cart, setCart }) {
                                   <button
                                     className="btn btn-danger"
                                     type="button"
+                                    onClick={() => removeFromCart(item.id)}
                                   >
                                     X
                                   </button>
@@ -76,7 +77,7 @@ export default function Header({ cart, setCart }) {
                           }
                         </tbody>
                       </table>
-                      <p className="text-end">Total pagar: <span className="fw-bold">${totalCart}</span></p>
+                      <p className="text-end">Total pagar: <span className="fw-bold">${ cartTotal }</span></p>
                       <button className="btn btn-dark w-100 mt-3 p-2" onClick={clearCart}>Vaciar Carrito</button>
                     </>
                   )
@@ -89,5 +90,3 @@ export default function Header({ cart, setCart }) {
     </header>
   )
 }
-
-

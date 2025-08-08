@@ -8,12 +8,36 @@ import { db } from "./data/db";
 
 function App() {
   const guitars = db;
-  const [cart, setCart] = useState([]);
-  // const [total, setTotal] = useState(0);
+  const [cart, setCart] = useState([]);  
+
+  function addToCart(guitar) {    
+    const isDuplicated = cart.some(item => item.id === guitar.id);        
+    
+    if (isDuplicated) {
+      const updatedCart = cart.map(item => {
+        if (item.id === guitar.id) {
+          item.quantity++;
+        }
+        return item;
+      });
+      setCart(updatedCart);
+    }else{
+      const newElement = { quantity: 1, ...guitar };
+      setCart([...cart, newElement]);
+    }
+  }
+
+  function removeFromCart(guitarId) {
+    setCart(prevCart => prevCart.filter(item => item.id !== guitarId));
+  }
 
   return (
     <>
-      <Header cart={ cart } setCart={ setCart }/>
+      <Header
+        cart={ cart } 
+        setCart={ setCart }        
+        removeFromCart={ removeFromCart }
+      />
 
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
@@ -23,9 +47,8 @@ function App() {
             guitars.map((guitar, index) => (
               <Guitar
                 key={index}
-                guitar={guitar}
-                setCart={setCart}
-                cart={cart}
+                addToCart={addToCart}                
+                guitar={guitar}                                
               />
             ))
           }
