@@ -2,74 +2,20 @@ import Header from "./components/Header"
 import Footer from "./components/Footer"
 import Guitar from "./components/Guitar"
 
-import { useEffect, useState } from "react"
-import { db } from "./data/db";
+import useCart from "./hooks/UseCart";
 
-function App() {
-  const guitars = db;  
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });  
+function App() {  
+  const { cart, guitars, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, cartTotal } = useCart();
 
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  function addToCart(guitar) {    
-    setCart(prev => {
-      const exists = prev.some(item => item.id === guitar.id);
-      if (exists) {
-        return prev.map(item =>
-          item.id === guitar.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prev, { ...guitar, quantity: 1 }];
-    });
-  }
-
-  function removeFromCart(guitarId) {
-    setCart(prevCart => prevCart.filter(item => item.id !== guitarId));
-  }   
-
-  function increaseQuantity(guitarId) {
-    setCart(prevCart => 
-      prevCart.map(item => {
-        if (item.id === guitarId) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      })
-    );
-  }
-
-  function decreaseQuantity(guitarId) {
-    setCart(prevCart => 
-      prevCart.map(item => {
-        if (item.id === guitarId && item.quantity > 1) {
-          return { ...item, quantity: item.quantity - 1 };
-        }
-        return item;
-      })
-    );
-  }
-
-  function clearCart(){
-    setCart([]);
-  }
-
-  
   return (
     <>
       <Header
-        cart={ cart } 
-        setCart={ setCart }        
+        cart={ cart }         
         removeFromCart={ removeFromCart }
         increaseQuantity={ increaseQuantity }
         decreaseQuantity={ decreaseQuantity }
         clearCart={ clearCart }
+        cartTotal={ cartTotal }
       />
 
       <main className="container-xl mt-5">
