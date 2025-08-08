@@ -22,7 +22,7 @@ function App() {
     if (isDuplicated) {
       const updatedCart = cart.map(item => {
         if (item.id === guitar.id) {
-          item.quantity++;
+          item.quantity = item.quantity + 1;
         }
         return item;
       });
@@ -41,7 +41,7 @@ function App() {
     setCart(prevCart => 
       prevCart.map(item => {
         if (item.id === guitarId) {
-          return { ...item, quantity: item.quantity++ };
+          return { ...item, quantity: item.quantity + 1 };
         }
         return item;
       })
@@ -52,7 +52,7 @@ function App() {
     setCart(prevCart => 
       prevCart.map(item => {
         if (item.id === guitarId && item.quantity > 1) {
-          return { ...item, quantity: item.quantity-- };
+          return { ...item, quantity: item.quantity - 1 };
         }
         return item;
       })
@@ -80,9 +80,9 @@ function App() {
 
         <div className="row mt-5">
           {
-            guitars.map((guitar, index) => (
+            guitars.map((guitar) => (
               <Guitar
-                key={index}
+                key={guitar.id}
                 addToCart={addToCart}                
                 guitar={guitar}                                
               />
