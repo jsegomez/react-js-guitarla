@@ -2,13 +2,19 @@ import Header from "./components/Header"
 import Footer from "./components/Footer"
 import Guitar from "./components/Guitar"
 
-import { useState } from "react"
-
+import { useEffect, useState } from "react"
 import { db } from "./data/db";
 
 function App() {
-  const guitars = db;
-  const [cart, setCart] = useState([]);  
+  const guitars = db;  
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });  
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   function addToCart(guitar) {    
     const isDuplicated = cart.some(item => item.id === guitar.id);        
@@ -29,7 +35,7 @@ function App() {
 
   function removeFromCart(guitarId) {
     setCart(prevCart => prevCart.filter(item => item.id !== guitarId));
-  }
+  }   
 
   function increaseQuantity(guitarId) {
     setCart(prevCart => 
@@ -56,6 +62,7 @@ function App() {
   function clearCart(){
     setCart([]);
   }
+
   
   return (
     <>
