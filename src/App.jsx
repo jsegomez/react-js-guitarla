@@ -17,20 +17,17 @@ function App() {
   }, [cart]);
 
   function addToCart(guitar) {    
-    const isDuplicated = cart.some(item => item.id === guitar.id);        
-    
-    if (isDuplicated) {
-      const updatedCart = cart.map(item => {
-        if (item.id === guitar.id) {
-          item.quantity = item.quantity + 1;
-        }
-        return item;
-      });
-      setCart(updatedCart);
-    }else{
-      const newElement = { quantity: 1, ...guitar };
-      setCart([...cart, newElement]);
-    }
+    setCart(prev => {
+      const exists = prev.some(item => item.id === guitar.id);
+      if (exists) {
+        return prev.map(item =>
+          item.id === guitar.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { ...guitar, quantity: 1 }];
+    });
   }
 
   function removeFromCart(guitarId) {
